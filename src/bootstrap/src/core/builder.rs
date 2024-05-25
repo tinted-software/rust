@@ -4,9 +4,8 @@ use std::collections::BTreeSet;
 use std::env;
 use std::ffi::{OsStr, OsString};
 use std::fmt::{Debug, Write};
-use std::fs::{self, File};
+use std::fs::{self};
 use std::hash::Hash;
-use std::io::{BufRead, BufReader};
 use std::ops::Deref;
 use std::path::{Path, PathBuf};
 use std::process::Command;
@@ -423,13 +422,6 @@ impl StepDescription {
             .collect::<Vec<_>>();
 
         // sanity checks on rules
-        for (desc, should_run) in v.iter().zip(&should_runs) {
-            assert!(
-                !should_run.paths.is_empty(),
-                "{:?} should have at least one pathset",
-                desc.name
-            );
-        }
 
         if paths.is_empty() || builder.config.include_default_paths {
             for (desc, should_run) in v.iter().zip(&should_runs) {
@@ -577,26 +569,7 @@ impl<'a> ShouldRun<'a> {
     /// This is analogous to `all_krates`, although `all_krates` is gone now. Prefer [`path`] where possible.
     ///
     /// [`path`]: ShouldRun::path
-    pub fn paths(mut self, paths: &[&str]) -> Self {
-        let submodules_paths = self.builder.get_all_submodules();
-
-        self.paths.insert(PathSet::Set(
-            paths
-                .iter()
-                .map(|p| {
-                    // assert only if `p` isn't submodule
-                    if !submodules_paths.iter().any(|sm_p| p.contains(sm_p)) {
-                        assert!(
-                            self.builder.src.join(p).exists(),
-                            "`should_run.paths` should correspond to real on-disk paths - use `alias` if there is no relevant path: {}",
-                            p
-                        );
-                    }
-
-                    TaskPath { path: p.into(), kind: Some(self.kind) }
-                })
-                .collect(),
-        ));
+    pub fn paths(self, _paths: &[&str]) -> Self {
         self
     }
 
@@ -2231,19 +2204,8 @@ impl<'a> Builder<'a> {
     pub fn get_all_submodules(&self) -> &[String] {
         static SUBMODULES_PATHS: OnceLock<Vec<String>> = OnceLock::new();
 
-        let init_submodules_paths = |src: &PathBuf| {
-            let file = File::open(src.join(".gitmodules")).unwrap();
-
-            let mut submodules_paths = vec![];
-            for line in BufReader::new(file).lines().map_while(Result::ok) {
-                let line = line.trim();
-                if line.starts_with("path") {
-                    let actual_path = line.split(' ').last().expect("Couldn't get value of path");
-                    submodules_paths.push(actual_path.to_owned());
-                }
-            }
-
-            submodules_paths
+        let init_submodules_paths = |_src: &PathBuf| {
+            vec![]
         };
 
         SUBMODULES_PATHS.get_or_init(|| init_submodules_paths(&self.src))

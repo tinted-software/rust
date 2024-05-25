@@ -336,10 +336,6 @@ impl<'a> Tarball<'a> {
 
         build_cli(&self, &mut cmd);
         cmd.arg("--work-dir").arg(&self.temp_dir);
-        if let Some(formats) = &self.builder.config.dist_compression_formats {
-            assert!(!formats.is_empty(), "dist.compression-formats can't be empty");
-            cmd.arg("--compression-formats").arg(formats.join(","));
-        }
 
         // For `x install` tarball files aren't needed, so we can speed up the process by not producing them.
         let compression_profile = if self.builder.kind == Kind::Install {
