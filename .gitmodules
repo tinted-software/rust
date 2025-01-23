@@ -26,11 +26,6 @@
 	path = src/doc/edition-guide
 	url = https://github.com/rust-lang/edition-guide.git
 	shallow = true
-[submodule "src/llvm-project"]
-	path = src/llvm-project
-	url = https://github.com/rust-lang/llvm-project.git
-	branch = rustc/19.1-2024-12-03
-	shallow = true
 [submodule "src/doc/embedded-book"]
 	path = src/doc/embedded-book
 	url = https://github.com/rust-embedded/book.git
@@ -46,8 +41,4 @@
 [submodule "src/tools/enzyme"]
 	path = src/tools/enzyme
 	url = https://github.com/EnzymeAD/Enzyme.git
-	shallow = true
-[submodule "src/gcc"]
-	path = src/gcc
-	url = https://github.com/rust-lang/gcc.git
 	shallow = true
