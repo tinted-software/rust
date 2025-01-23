@@ -51,7 +51,7 @@ impl Arch {
     fn target_cpu(self, abi: TargetAbi) -> &'static str {
         match self {
             Armv7k => "cortex-a8",
-            Armv7s => "swift", // iOS 10 is only supported on iPhone 5 or higher.
+            Armv7s => "cortex-a9",
             Arm64 => match abi {
                 TargetAbi::Normal => "apple-a7",
                 TargetAbi::Simulator => "apple-a12",
@@ -62,8 +62,8 @@ impl Arch {
             // Only macOS 10.12+ is supported, which means
             // all x86_64/x86 CPUs must be running at least penryn
             // https://github.com/llvm/llvm-project/blob/01f924d0e37a5deae51df0d77e10a15b63aa0c0f/clang/lib/Driver/ToolChains/Arch/X86.cpp#L79-L82
-            I386 | I686 => "penryn",
-            X86_64 => "penryn",
+            I386 | I686 => "yonah",
+            X86_64 => "core2",
             // Note: `core-avx2` is slightly more advanced than `x86_64h`, see
             // comments (and disabled features) in `x86_64h_apple_darwin` for
             // details. It is a higher baseline then `penryn` however.

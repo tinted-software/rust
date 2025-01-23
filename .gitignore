@@ -45,6 +45,8 @@ no_llvm_build
 /doc/
 /inst/
 /llvm/
+/src/llvm-project
+/src/gcc
 /mingw-build/
 /build
 /build-rust-analyzer/

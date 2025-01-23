@@ -277,7 +277,7 @@ impl Step for Llvm {
     const ONLY_HOSTS: bool = true;
 
     fn should_run(run: ShouldRun<'_>) -> ShouldRun<'_> {
-        run.path("src/llvm-project").path("src/llvm-project/llvm")
+        run
     }
 
     fn make_run(run: RunConfig<'_>) {
@@ -983,7 +983,7 @@ impl Step for Lld {
     const ONLY_HOSTS: bool = true;
 
     fn should_run(run: ShouldRun<'_>) -> ShouldRun<'_> {
-        run.path("src/llvm-project/lld")
+        run
     }
 
     fn make_run(run: RunConfig<'_>) {
@@ -1291,7 +1291,7 @@ impl Step for CrtBeginEnd {
     type Output = PathBuf;
 
     fn should_run(run: ShouldRun<'_>) -> ShouldRun<'_> {
-        run.path("src/llvm-project/compiler-rt/lib/crt")
+        run
     }
 
     fn make_run(run: RunConfig<'_>) {

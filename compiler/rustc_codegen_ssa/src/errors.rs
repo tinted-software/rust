@@ -606,8 +606,6 @@ pub(crate) struct UnsupportedArch<'a> {
 pub(crate) enum AppleDeploymentTarget {
     #[diag(codegen_ssa_apple_deployment_target_invalid)]
     Invalid { env_var: &'static str, error: ParseIntError },
-    #[diag(codegen_ssa_apple_deployment_target_too_low)]
-    TooLow { env_var: &'static str, version: String, os_min: String },
 }
 
 #[derive(Diagnostic)]
